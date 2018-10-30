@@ -1,43 +1,43 @@
-#!/bin/bash
-# echo "Enable IAM"
-# gcloud projects create $1
-# gcloud iam service-accounts create $1 --project $1
-# gcloud iam service-accounts keys create gce-$1-key.json --iam-account=$1@$1.iam.gserviceaccount.com --project $1
-# gcloud projects add-iam-policy-binding $1 --member="serviceAccount:$1@$1.iam.gserviceaccount.com" --role='roles/editor' --project $1
-#
-# echo "Reconfigure the kubectl with new cluster data"
-# gcloud config set project $1
-#
-# echo "Link billing to the account"
-# ACC_ID=`gcloud alpha billing accounts list|awk '{print $1}'|grep -v ID`
-# echo $ACC_ID
-# gcloud alpha billing projects link $1 --billing-account $ACC_ID
-#
-# echo "Enable API's"
-# echo "Enable Google Cloud SQL API"
-# gcloud services enable sql-component.googleapis.com
-# echo "Enable Google Cloud SQL ADMIN"
-# gcloud services enable sqladmin.googleapis.com
-# echo "Enable Google Cloud Compute API"
-# gcloud services enable compute.googleapis.com
-# echo "Enable Google Cloud Kubernetes API"
-# gcloud services enable container.googleapis.com
-#
-# echo "Please enter the password you want to use for the Kubernetes cluster:"
-# read -sr K8S_PASSWORD_INPUT
-#
-# echo "Setup Google Cloud Kubernetes"
-# cd kubernetes \
-# && terraform init \
-# && terraform plan -var "project=$1" -var "cluster_name=$1" -var "username=$1" -var "password=$K8S_PASSWORD_INPUT" \
-# && terraform apply -var "project=$1" -var "cluster_name=$1" -var "username=$1" -var "password=$K8S_PASSWORD_INPUT"
-#
-# echo "Deploy MySQL on Google Cloud SQL"
-# echo "Please enter the Cloud SQL user password"
-# read -sr CLOUD_SQL_PASSWORD_INPUT
-# cd ../mysql && terraform init \
-# && terraform plan  -var "name=$1" -var "project=$1" -var "db_name=$1" -var "user_name=$1" -var "user_password=$CLOUD_SQL_PASSWORD_INPUT" \
-# && terraform apply  -var "name=$1" -var "project=$1" -var "db_name=$1" -var "user_name=$1" -var "user_password=$CLOUD_SQL_PASSWORD_INPUT"
+!/bin/bash
+echo "Enable IAM"
+gcloud projects create $1
+gcloud iam service-accounts create $1 --project $1
+gcloud iam service-accounts keys create gce-$1-key.json --iam-account=$1@$1.iam.gserviceaccount.com --project $1
+gcloud projects add-iam-policy-binding $1 --member="serviceAccount:$1@$1.iam.gserviceaccount.com" --role='roles/editor' --project $1
+
+echo "Reconfigure the kubectl with new cluster data"
+gcloud config set project $1
+
+echo "Link billing to the account"
+ACC_ID=`gcloud alpha billing accounts list|awk '{print $1}'|grep -v ID`
+echo $ACC_ID
+gcloud alpha billing projects link $1 --billing-account $ACC_ID
+
+echo "Enable API's"
+echo "Enable Google Cloud SQL API"
+gcloud services enable sql-component.googleapis.com
+echo "Enable Google Cloud SQL ADMIN"
+gcloud services enable sqladmin.googleapis.com
+echo "Enable Google Cloud Compute API"
+gcloud services enable compute.googleapis.com
+echo "Enable Google Cloud Kubernetes API"
+gcloud services enable container.googleapis.com
+
+echo "Please enter the password you want to use for the Kubernetes cluster:"
+read -sr K8S_PASSWORD_INPUT
+
+echo "Setup Google Cloud Kubernetes"
+cd kubernetes \
+&& terraform init \
+&& terraform plan -var "project=$1" -var "cluster_name=$1" -var "username=$1" -var "password=$K8S_PASSWORD_INPUT" \
+&& terraform apply -var "project=$1" -var "cluster_name=$1" -var "username=$1" -var "password=$K8S_PASSWORD_INPUT"
+
+echo "Deploy MySQL on Google Cloud SQL"
+echo "Please enter the Cloud SQL user password"
+read -sr CLOUD_SQL_PASSWORD_INPUT
+cd ../mysql && terraform init \
+&& terraform plan  -var "name=$1" -var "project=$1" -var "db_name=$1" -var "user_name=$1" -var "user_password=$CLOUD_SQL_PASSWORD_INPUT" \
+&& terraform apply  -var "name=$1" -var "project=$1" -var "db_name=$1" -var "user_name=$1" -var "user_password=$CLOUD_SQL_PASSWORD_INPUT"
 
 echo "Addapt the application template"
 cat <<EOF > ../application_deploy/app_deployment.yml
