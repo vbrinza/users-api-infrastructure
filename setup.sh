@@ -1,4 +1,4 @@
-!/bin/bash
+#!/bin/bash
 echo "Enable IAM"
 gcloud projects create $1
 gcloud iam service-accounts create $1 --project $1
